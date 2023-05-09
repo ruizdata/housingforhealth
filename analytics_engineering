@@ -83,8 +83,8 @@ Before calculation, produce a common table expression (CTE) relating all three t
 WITH housing_comb AS 
 (	
 SELECT housing_episode.*,
-        client.*, 
-                                                                                                              property.* 
+       client.*, 
+       property.* 
 FROM housing_episode
 JOIN client 
 ON housing_episode.client_id = client.client_id
