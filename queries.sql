@@ -7,41 +7,42 @@ Assumptions
 
 -- QUALITY ASSURANCE
 
-    Client table, test 1
+   Client table, test 1
 
-	Test that the primary key (PK) is unique and has an integrity constraint.
+   Test that the primary key (PK) is unique and has an integrity constraint.
 
-If Error, then Pass.
+   If Error, then Pass.
 
 INSERT INTO client_id
 VALUES ( ‘Test’, 02/15/2023, ‘LADHS’ ), 
-                ( ‘Test’, 02/15/2023, ‘LADHS’ );
+       ( ‘Test’, 02/15/2023, ‘LADHS’ );
 
 -- Client table, test 2
 
-	Test columns for correct data type, especially dates for later calculations.
+   Test columns for correct data type, especially dates for later calculations.
 
-	If application dates are formatted MM/DD/YYYY, then Pass.
+   If application dates are formatted MM/DD/YYYY, then Pass.
 
 SELECT column, 
-   data_type
+       data_type
 FROM information_schema.columns
 WHERE table_name = ‘client’ and table_schema = ‘schema_name’;
 
 -- Housing Episode table, test 1
  
-Test for housing episodes with null values, meaning missing either client or property.
+   Test for housing episodes with null values, meaning missing either client or property.
 
-If No Results, then Pass.
+   If No Results, then Pass.
 
 SELECT housing_event_id
 FROM housing_episode
 WHERE client_id OR property_id IS NULL;
+
 -- Housing Episode table, test 2	
 
-Test for illogical housing timelines, such as move-out date precedes move-in date (1st statement), or dates are outside known tenancy agreements (2nd statement).
+   Test for illogical housing timelines, such as move-out date precedes move-in date (1st statement), or dates are outside known tenancy agreements (2nd statement).
 
-If No Results, then Pass.
+   If No Results, then Pass.
 
 SELECT housing_event_id
 FROM housing episode
@@ -53,9 +54,9 @@ WHERE move_in_date <  01/01/2022 OR move_out_date > 12/31/2025;
 
 -- Property table, test 1:
 	
-	Test that all properties are in California.
+   Test that all properties are in California.
 
-	If No Results, then Pass.
+   If No Results, then Pass.
 
 SELECT property_id
 FROM property
@@ -63,18 +64,14 @@ WHERE state != ‘California’;
 
 -- Property table, test 2:
 
-Test columns for correct data type, this time for referential integrity. Data type and domain must match between primary key and foreign key (FK) for joins to work.
+   Test columns for correct data type, this time for referential integrity. Data type and domain must match between primary key and foreign key (FK) for joins to work.
 
-If identification numbers are formatted varchar(255), then Pass.
+   If identification numbers are formatted varchar(255), then Pass.
 
 SELECT column, 
-   data_type
+       data_type
 FROM information_schema.columns
 WHERE table_name = ‘property’ and table_schema = ‘schema_name’;
-
-
-	
-
 
 -- KEY PERFORMANCE INDICATORS
 
@@ -113,9 +110,6 @@ SET move_in_speed = move_in_date – application_date		-- Move-in speed formula
 SELECT AVG(move_in_speed)
 FROM housing_comb;
 
-
-
-
 -- Indicator 3
 
 Based on the average number of days from client's application date and first move-in date, select how many programs are housing clients faster than the average.
@@ -149,11 +143,12 @@ UPDATE housing_comb
 SET relocate_rate = relocated / occupied			-- Relocation rate formula
 
 SELECT zip, 
-                           relocate_rate
+       relocate_rate
 FROM housing_comb
 GROUP by zip
 ORDER by relocate_rate DESC
 LIMIT 5;
+
 -- Indicator 6
 
 Select the overall average occupancy rate (Number of Clients in Property DIVIDED BY Number of Units in Property) of properties by region and program.
@@ -165,7 +160,7 @@ ALTER TABLE housing_comb
 ADD occup_rate INT
 
 UPDATE housing_comb
-SET occup_rate = occupied / total_units			-- Occupancy rate formula
+SET occup_rate = occupied / total_units			         -- Occupancy rate formula
 
 SELECT AVG(occup_rate)
 FROM housing_comb
